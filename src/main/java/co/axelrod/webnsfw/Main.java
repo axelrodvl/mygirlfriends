@@ -26,8 +26,8 @@ import static spark.Spark.halt;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-//        String domain = args[0];
-        String domain = "localhost";
+        String domain = args[0];
+        //String domain = "localhost";
 
         final Configuration configuration = new Configuration();
         configuration.setClassForTemplateLoading
