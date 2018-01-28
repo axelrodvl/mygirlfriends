@@ -105,11 +105,11 @@ public class Main {
 
     public static void invokeScript(String domain, String code) {
         try {
-            System.out.println("Domain: " + code);
+            System.out.println("Domain: " + domain);
             System.out.println("Code: " + code);
 
             String[] cmds = {
-                    "/bin/zsh", "/Users/vadim/work/nsfw/open_nsfw/runForFiles.sh", domain, code};
+                    "/bin/sh", "runForFiles.sh", domain, code};
 
             Process p = Runtime.getRuntime().exec(cmds);
 
