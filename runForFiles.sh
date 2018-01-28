@@ -2,7 +2,7 @@
 
 # Downloading photos from VK
 echo "Running VK Photo Downloader"
-java -jar vk-photo-downloader-0.1.0-SNAPSHOT-jar-with-dependencies.jar "$1"
+java -jar vk-photo-downloader-0.1.0-SNAPSHOT-jar-with-dependencies.jar "$1" "$2"
 
 # Parsing photo and running open_nsfw
 echo "Running open-nsfw"

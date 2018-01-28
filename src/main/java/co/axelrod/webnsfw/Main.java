@@ -26,6 +26,9 @@ import static spark.Spark.halt;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
+//        String domain = args[0];
+        String domain = "localhost";
+
         final Configuration configuration = new Configuration();
         configuration.setClassForTemplateLoading
                 (Main.class, "/");
@@ -33,7 +36,7 @@ public class Main {
         Spark.get("/", new Route() {
             public Object handle(final Request request,
                                  final Response response) {
-                response.redirect("https://oauth.vk.com/authorize?client_id=6348349&display=page&redirect_uri=http://localhost:4567/auth&scope=photos&response_type=code&v=5.71");
+                response.redirect("https://oauth.vk.com/authorize?client_id=6348349&display=page&redirect_uri=http://" + domain + ":4567/auth&scope=photos&response_type=code&v=5.71");
                 return response;
             }
         });
@@ -44,9 +47,9 @@ public class Main {
 
                 String code = request.queryParams("code");
                 System.out.println("Code retrieved from VK API: " + code);
-                invokeScript(code);
+                invokeScript(domain, code);
 
-                response.redirect("http://localhost:4567/results");
+                response.redirect("http://" + domain + ":4567/results");
 
                 return response;
             }
@@ -100,12 +103,13 @@ public class Main {
         });
     }
 
-    public static void invokeScript(String code) {
+    public static void invokeScript(String domain, String code) {
         try {
+            System.out.println("Domain: " + code);
             System.out.println("Code: " + code);
 
             String[] cmds = {
-                    "/bin/zsh", "/Users/vadim/work/nsfw/open_nsfw/runForFiles.sh", code};
+                    "/bin/zsh", "/Users/vadim/work/nsfw/open_nsfw/runForFiles.sh", domain, code};
 
             Process p = Runtime.getRuntime().exec(cmds);
 
