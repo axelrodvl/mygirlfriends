@@ -73,7 +73,12 @@ public class Main {
                     while(line != null || count > 0) {
                         line = line.substring(6);
                         String userId = line.split("/")[0];
-                        String imageId = line.split("/")[1].substring(0, line.split("/")[1].length() - 4);
+
+                        String imageId = line.split("/")[1].substring(0, line.split("/")[1].length() - 4)
+                                // Removing likes count
+                                .split("_")[0];
+
+
                         String imagesJSON = getStringFromFile("users/" + userId + ".json");
                         String highResURL = getHighResURL(imagesJSON, imageId);
                         System.out.println(highResURL);
