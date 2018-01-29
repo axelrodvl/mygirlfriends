@@ -1,3 +1,6 @@
 [submodule "VKPhotoDownloader"]
 	path = VKPhotoDownloader
 	url = https://github.com/axelrodvl/VKPhotoDownloader.git
+[submodule "open_nsfw"]
+	path = open_nsfw
+	url = https://github.com/yahoo/open_nsfw.git
