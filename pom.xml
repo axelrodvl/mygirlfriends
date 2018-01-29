@@ -7,6 +7,24 @@
     <groupId>co.axelrod</groupId>
     <artifactId>mygirlfriends</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+    <description>NSFW photo analyser for VK.com</description>
+
+    <developers>
+        <developer>
+            <id>axelrodvl</id>
+            <name>Vadim Axelrod</name>
+            <email>vadim@axelrod.co</email>
+            <url>https://github.com/axelrodvl</url>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Moscow</timezone>
+            <properties>
+                <picUrl>https://github.com/axelrodvl.png</picUrl>
+            </properties>
+        </developer>
+    </developers>
 
     <build>
         <plugins>
@@ -63,6 +81,11 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>3.5</version>
         </dependency>
     </dependencies>
 </project>

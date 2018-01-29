@@ -1,10 +1,14 @@
 package co.axelrod.webnsfw;
 
+import co.axelrod.webnsfw.telegram.MyHotGirlfriendsBot;
 import co.axelrod.webnsfw.util.Sorter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import freemarker.template.Template;
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.TelegramBotsApi;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -27,8 +31,17 @@ import static spark.Spark.halt;
  */
 public class Main {
     public static void main(String[] args) {
-        String domain = args[0];
-        //String domain = "localhost";
+        //String domain = args[0];
+        String domain = "localhost";
+
+        // Starting Telegram bot
+        ApiContextInitializer.init();
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+        try {
+            telegramBotsApi.registerBot(new MyHotGirlfriendsBot());
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
 
         final Configuration configuration = new Configuration();
         configuration.setClassForTemplateLoading
