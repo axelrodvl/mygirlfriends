@@ -1,3 +1,10 @@
+# My girlfriends
+## Funhack hackaton project
+
+This project downloads friends photos from VK.com, calculates NSFW score with open_nsfw, sorts and returns output in HTML page.
+
+Information below is original open_nsfw README.MD
+
 # Open nsfw model
 This repo contains code for running Not Suitable for Work (NSFW) classification deep neural network Caffe models. Please refer our [blog](https://yahooeng.tumblr.com/post/151148689421/open-sourcing-a-deep-learning-solution-for) post which describes this work and experiments in more detail.
 

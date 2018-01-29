@@ -1,0 +1,3 @@
+[submodule "VKPhotoDownloader"]
+	path = VKPhotoDownloader
+	url = https://github.com/axelrodvl/VKPhotoDownloader.git
