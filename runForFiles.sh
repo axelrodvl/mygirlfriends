@@ -16,7 +16,3 @@ OUTPUT="$(docker run -a stdin -a stdout --volume=$(pwd):/workspace bvlc/caffe:cp
         | awk '{ print $3 " " $4 }'
         )"
 echo ${OUTPUT} >> results.txt
-
-# Sorting results
-echo "Running sorter"
-java -jar $(pwd)/sorter-0.1.0-SNAPSHOT-jar-with-dependencies.jar "results.txt" "sortedResults.txt"

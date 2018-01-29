@@ -1,5 +1,6 @@
 package co.axelrod.webnsfw;
 
+import co.axelrod.webnsfw.util.Sorter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -25,7 +26,7 @@ import static spark.Spark.halt;
  * Created by Vadim Axelrod (vadim@axelrod.co) on 27.01.2018.
  */
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String domain = args[0];
         //String domain = "localhost";
 
@@ -58,6 +59,11 @@ public class Main {
         Spark.get("/results", new Route() {
             public Object handle(final Request request,
                                  final Response response) {
+                System.out.println("Opened results page");
+
+                System.out.println("Sorting results");
+                Sorter.sortResults("results.txt", "sortedResults.txt");
+
                 StringWriter writer = new StringWriter();
                 try {
                     Template helloTemplate = configuration.getTemplate("hello.ftl");
@@ -67,13 +73,13 @@ public class Main {
 
                     List<String> results = new ArrayList<>();
 
+                    System.out.println("Started parsing of sortedResults.txt");
                     InputStream is = new FileInputStream("sortedResults.txt");
                     BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 
                     String line = buf.readLine();
 
-                    Integer count = 100;
-                    while(line != null || count > 0) {
+                    while(line != null) {
                         line = line.substring(6);
                         String userId = line.split("/")[0];
 
@@ -81,17 +87,16 @@ public class Main {
                                 // Removing likes count
                                 .split("_")[0];
 
-
                         String imagesJSON = getStringFromFile("users/" + userId + ".json");
                         String highResURL = getHighResURL(imagesJSON, imageId);
                         System.out.println(highResURL);
                         if(highResURL != null) {
                             results.add(highResURL);
-                            count--;
                         }
                         line = buf.readLine();
                     }
 
+                    System.out.println("Parsing completed, showing page");
                     helloMap.put("results", results);
                     helloTemplate.process(helloMap, writer);
                 } catch (Exception e) {
@@ -131,11 +136,10 @@ public class Main {
 
     public static String getStringFromFile(String pathToFile) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(pathToFile));
-        String outputData = new String(encoded, "UTF-8");
-        return outputData;
+        return new String(encoded, "UTF-8");
     }
 
-    private static String getHighResURL(String response, String imageId) throws Exception {
+    private static String getHighResURL(String response, String imageId) {
         JsonElement photosJson = new JsonParser().parse(response).getAsJsonObject().get("response");
 
         JsonArray photosArray = photosJson.getAsJsonObject().get("items").getAsJsonArray();
