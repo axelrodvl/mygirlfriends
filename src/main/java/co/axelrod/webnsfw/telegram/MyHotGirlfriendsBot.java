@@ -2,13 +2,19 @@ package co.axelrod.webnsfw.telegram;
 
 import co.axelrod.webnsfw.telegram.token.TokenStorageImpl;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,28 +27,62 @@ public class MyHotGirlfriendsBot extends TelegramLongPollingBot {
             Long chatId = update.getMessage().getChatId();
             System.out.println("New request from Telegram bot with id: " + chatId);
 
-
-            // Create ReplyKeyboardMarkup object
-            ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-            // Create the keyboard (list of keyboard rows)
-            List<KeyboardRow> keyboard = new ArrayList<>();
-            // Create a keyboard row
-            KeyboardRow row = new KeyboardRow();
-            // Set each button, you can also use KeyboardButton objects if you need something else than text
-            row.add("Хочу горячего");
-            // Add the first row to the keyboard
-            keyboard.add(row);
-            // Set the keyboard to the markup
-            keyboardMarkup.setKeyboard(keyboard);
+            InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+            List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+            List<InlineKeyboardButton> rowInline = new ArrayList<>();
+            rowInline.add(new InlineKeyboardButton()
+                    .setText("Авторизоваться")
+                    .setUrl("http://52.166.68.146:4567"));
+            rowInline.add(new InlineKeyboardButton()
+                    .setText("Результаты")
+                    .setCallbackData("getResults"));
+            rowsInline.add(rowInline);
+            keyboardMarkup.setKeyboard(rowsInline);
 
             try {
                 execute(prepareMessage(chatId, "Добро пожаловать в MyHotGirlfriends!"));
                 execute(prepareMessage(chatId, "Вы авторизуетесь через VK.com, мы выгружаем фотогафии ваших подруг, отбираем самые горячие среди всех и отправляем вам!"));
-                execute(prepareMessage(chatId, "Telegram интерфейс находится в разработке..."));
-                execute(prepareMessage(chatId, "Но вы можете воспользоваться веб версией: http://52.166.68.146:4567"));
-                execute(prepareMessage(chatId, "Откройте ссылку, авторизуйтесь через ВК и ожидайте результата"));
-                execute(prepareMessage(chatId, "Через 30-60 минут результаты будут здесь: http://52.166.68.146:4567/results"));
-                execute(prepareMessage(chatId, "Авторизуйтесь здесь: http://52.166.68.146:4567", keyboardMarkup));
+                execute(prepareMessage(chatId, "Авторизуйтесь в ВК для начала обработки"));
+                execute(prepareMessage(chatId, "Результаты будут доступны через 30 минут", keyboardMarkup));
+            } catch (TelegramApiException ex) {
+                ex.printStackTrace();
+            }
+        } else if(update.hasCallbackQuery()) {
+            Long chatId = update.getCallbackQuery().getMessage().getChatId();
+            System.out.println("New callback query from Telegram bot with id: " + chatId);
+
+            try {
+                SendPhoto sendPhoto = new SendPhoto()
+                        .setChatId(chatId)
+                        .setPhoto("https://pp.userapi.com/c840632/v840632339/6295/Xm7zAbSn5Xc.jpg")
+                        .setCaption("THE HOTTEST ONE");
+                sendPhoto(sendPhoto);
+
+                sendPhoto = new SendPhoto()
+                        .setChatId(chatId)
+                        .setPhoto("https://pp.userapi.com/c841224/v841224931/42c30/6-AY9-felng.jpg")
+                        .setCaption("Второе место");
+
+                sendPhoto(sendPhoto);
+
+                sendPhoto = new SendPhoto()
+                        .setChatId(chatId)
+                        .setPhoto("https://pp.userapi.com/c637127/v637127354/46957/bsTzpgPmSBM.jpg")
+                        .setCaption("Тоже ничего");
+
+                sendPhoto(sendPhoto);
+
+
+                InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+                List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+                List<InlineKeyboardButton> rowInline = new ArrayList<>();
+                rowInline.add(new InlineKeyboardButton()
+                        .setText("А можно всех посмотреть?")
+                        .setUrl("http://52.166.68.146:4567/results"));
+                rowsInline.add(rowInline);
+                keyboardMarkup.setKeyboard(rowsInline);
+
+                execute(prepareMessage(chatId, "Наверное, у вас возник вопрос:", keyboardMarkup));
             } catch (TelegramApiException ex) {
                 ex.printStackTrace();
             }
@@ -66,11 +106,19 @@ public class MyHotGirlfriendsBot extends TelegramLongPollingBot {
         return message;
     }
 
-    private SendMessage prepareMessage(Long chatId, String text, ReplyKeyboardMarkup keyboard) {
+    private SendMessage prepareMessage(Long chatId, String text, ReplyKeyboard keyboard) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
         message.setReplyMarkup(keyboard);
+        return message;
+    }
+
+    private SendMessage prepareWebPreviewMessage(Long chatId, String text) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(text);
+        message.enableWebPagePreview();
         return message;
     }
 }
