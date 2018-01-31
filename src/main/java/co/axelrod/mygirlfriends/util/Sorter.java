@@ -1,6 +1,6 @@
-package co.axelrod.webnsfw.util;
+package co.axelrod.mygirlfriends.util;
 
-import co.axelrod.webnsfw.model.Result;
+import co.axelrod.mygirlfriends.model.Result;
 
 import java.io.*;
 import java.util.ArrayList;

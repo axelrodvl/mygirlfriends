@@ -1,20 +1,18 @@
-package co.axelrod.webnsfw.telegram;
+package co.axelrod.mygirlfriends.telegram;
 
-import co.axelrod.webnsfw.telegram.token.TokenStorageImpl;
+import co.axelrod.mygirlfriends.telegram.token.TelegramTokenStorage;
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -96,7 +94,7 @@ public class MyHotGirlfriendsBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return new TokenStorageImpl().getToken();
+        return new TelegramTokenStorage().getToken();
     }
 
     private SendMessage prepareMessage(Long chatId, String text) {

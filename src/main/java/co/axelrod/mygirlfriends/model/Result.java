@@ -1,4 +1,4 @@
-package co.axelrod.webnsfw.model;
+package co.axelrod.mygirlfriends.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
