@@ -11,9 +11,10 @@
 **/bin/**
 
 photo
-photo_almas
 users
 results.txt
 sortedResults.txt
 nohup.out
-src/main/java/co/axelrod/webnsfw/telegram/token/TokenStorageImpl.java
+src/main/java/co/axelrod/mygirlfriends/telegram/token/TelegramTokenStorage.java
+src/main/java/co/axelrod/mygirlfriends/vk/VKTokenStorage.java
+open_nsfw/classify_dir.py
