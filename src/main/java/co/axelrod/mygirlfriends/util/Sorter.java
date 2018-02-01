@@ -1,6 +1,7 @@
 package co.axelrod.mygirlfriends.util;
 
 import co.axelrod.mygirlfriends.model.Result;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,9 +11,11 @@ import java.util.List;
 /**
  * Created by Vadim Axelrod (vadim@axelrod.co) on 27.01.2018.
  */
+
+@Slf4j
 public class Sorter {
     public static void sortResults(String unsortedResultsFileName, String sortedResultsFileName) {
-        System.out.println("Starting result sorting");
+        log.debug("Starting result sorting");
 
         try {
             List<Result> results = new ArrayList<>();
@@ -66,9 +69,9 @@ public class Sorter {
                 }
             }
 
-            System.out.println("Sorting result saved in file: " + sortedResultsFileName);
+            log.debug("Sorting result saved in file: " + sortedResultsFileName);
         } catch (Exception ex) {
-            System.out.println("Unable to parse results file and sort");
+            log.error("Unable to parse results file and sort");
         }
     }
 

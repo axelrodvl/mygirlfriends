@@ -5,6 +5,7 @@ import co.axelrod.mygirlfriends.nsfw.NSFWWrapper;
 import co.axelrod.mygirlfriends.util.Sorter;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import lombok.extern.slf4j.Slf4j;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -25,6 +26,8 @@ import static spark.Spark.halt;
 /**
  * Created by Vadim Axelrod (vadim@axelrod.co) on 31.01.2018.
  */
+
+@Slf4j
 public class Routes {
     private String domain;
     private NSFWWrapper nsfwService;
@@ -53,7 +56,7 @@ public class Routes {
             final Response response) {
 
                 String code = request.queryParams("code");
-                System.out.println("Code retrieved from VK API: " + code);
+                log.debug("Code retrieved from VK API: " + code);
                 nsfwService.invokeScript(code);
 
                 response.redirect("http://" + domain + ":4567/results");
@@ -65,9 +68,8 @@ public class Routes {
             Spark.get("/results", new Route() {
             public Object handle(final Request request,
             final Response response) {
-                System.out.println("Opened results page");
-
-                System.out.println("Sorting results");
+                log.debug("Opened results page");
+                log.debug("Sorting results");
                 Sorter.sortResults(UNSORTED_RESULTS_FILE_PATH, SORTED_RESULTS_FILE_PATH);
 
                 StringWriter writer = new StringWriter();
@@ -79,7 +81,7 @@ public class Routes {
 
                     List<String> results = new ArrayList<>();
 
-                    System.out.println("Started parsing of " + SORTED_RESULTS_FILE_PATH);
+                    log.debug("Started parsing of " + SORTED_RESULTS_FILE_PATH);
                     InputStream is = new FileInputStream(SORTED_RESULTS_FILE_PATH);
                     BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 
@@ -95,14 +97,14 @@ public class Routes {
 
                         String imagesJSON = getStringFromFile("users/" + userId + ".json");
                         String highResURL = getHighResURL(imagesJSON, imageId);
-                        System.out.println(highResURL);
+                        log.debug(highResURL + " added to page");
                         if(highResURL != null) {
                             results.add(highResURL);
                         }
                         line = buf.readLine();
                     }
 
-                    System.out.println("Parsing completed, showing page");
+                    log.debug("Parsing completed, showing page");
                     helloMap.put("results", results);
                     helloTemplate.process(helloMap, writer);
                 } catch (Exception e) {

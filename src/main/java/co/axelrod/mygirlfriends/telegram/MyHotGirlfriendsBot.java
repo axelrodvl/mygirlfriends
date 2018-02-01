@@ -1,6 +1,7 @@
 package co.axelrod.mygirlfriends.telegram;
 
 import co.axelrod.mygirlfriends.telegram.token.TelegramTokenStorage;
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -18,12 +19,15 @@ import java.util.List;
 /**
  * Created by Vadim Axelrod (vadim@axelrod.co) on 29.01.2018.
  */
+
+@Slf4j
 public class MyHotGirlfriendsBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             Long chatId = update.getMessage().getChatId();
-            System.out.println("New request from Telegram bot with id: " + chatId);
+
+            log.debug("New request from Telegram bot with id: " + chatId);
 
             InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -47,7 +51,8 @@ public class MyHotGirlfriendsBot extends TelegramLongPollingBot {
             }
         } else if(update.hasCallbackQuery()) {
             Long chatId = update.getCallbackQuery().getMessage().getChatId();
-            System.out.println("New callback query from Telegram bot with id: " + chatId);
+
+            log.debug("New callback query from Telegram bot with id: " + chatId);
 
             try {
                 SendPhoto sendPhoto = new SendPhoto()

@@ -3,6 +3,7 @@ package co.axelrod.mygirlfriends.nsfw;
 import co.axelrod.vk.VKPhotoDownloader;
 import co.axelrod.vk.config.TokenStorage;
 import co.axelrod.mygirlfriends.vk.VKTokenStorage;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,6 +14,8 @@ import static co.axelrod.mygirlfriends.util.FileUtil.USERS_DIR_PATH;
 /**
  * Created by Vadim Axelrod (vadim@axelrod.co) on 31.01.2018.
  */
+
+@Slf4j
 public class NSFWWrapper {
     private String domain;
 
@@ -27,13 +30,10 @@ public class NSFWWrapper {
         VKPhotoDownloader vkPhotoDownloader = new VKPhotoDownloader(domain, tokenStorage, PHOTOS_DIR_PATH, USERS_DIR_PATH);
 
         try {
-            System.out.println("Domain: " + domain);
-            System.out.println("Code: " + code);
-
-            System.out.println("Downloading photos from VK");
+            log.debug("Downloading " + photosToDownload + " photos from VK.com");
             vkPhotoDownloader.downloadPhoto(code, photosToDownload);
 
-            String[] cmds = {"/bin/sh", "runOpenNSFW.sh", domain, code};
+            String[] cmds = {"/bin/sh", "runOpenNSFW.sh"};
 
             Process p = Runtime.getRuntime().exec(cmds);
 
@@ -43,13 +43,13 @@ public class NSFWWrapper {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
+                    log.debug(line);
                 }
             }
-            System.out.println ("Bash script running is done");
+            log.debug("runOpenNSFW.sh is done");
         }
         catch (Exception e) {
-            System.out.println ("Err: " + e.getMessage());
+            log.error(e.getMessage());
         }
     }
 }
